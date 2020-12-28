@@ -3,7 +3,7 @@ import Song from "./components/Song";
 import Player from "./components/Player";
 import Library from "./components/Library";
 import Nav from "./components/Nav";
-import data from "./utils";
+import data from "./data";
 import "./styles/app.scss";
 
 function App() {
