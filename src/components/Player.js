@@ -18,9 +18,9 @@ const Player = ({
   setCurrentSong,
   setSongs,
 }) => {
-  React.useEffect(() => {
+  const activeLibraryHandler = (nextPrev) => {
     const newSongs = songs.map((item) => {
-      if (item.id === currentSong.id) {
+      if (item.id === nextPrev.id) {
         return {
           ...item,
           active: true,
@@ -33,7 +33,7 @@ const Player = ({
       }
     });
     setSongs(newSongs);
-  }, [currentSong]);
+  };
   const playSongHandler = () => {
     if (isPlaying) {
       audioRef.current.pause();
@@ -59,16 +59,21 @@ const Player = ({
       case "skip-back":
         if ((currentIndex - 1) % songs.length === -1) {
           await setCurrentSong(songs[songs.length - 1]);
+          activeLibraryHandler(songs[songs.length - 1]);
           if (isPlaying) audioRef.current.play();
           return;
         }
         await setCurrentSong(songs[(currentIndex - 1) % songs.length]);
+        activeLibraryHandler(songs[(currentIndex - 1) % songs.length]);
         break;
       case "skip-forward":
         await setCurrentSong(songs[(currentIndex + 1) % songs.length]);
+        activeLibraryHandler(songs[(currentIndex + 1) % songs.length]);
         break;
       default:
-        return await setCurrentSong(songs[currentIndex]);
+        await setCurrentSong(songs[currentIndex]);
+        activeLibraryHandler(songs[currentIndex]);
+        break;
     }
     if (isPlaying) audioRef.current.play();
   };
